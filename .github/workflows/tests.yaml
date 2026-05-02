@@ -7,7 +7,6 @@ jobs:
       fail-fast: false
       matrix:
         php-version: ['8.2', '8.3', '8.4']
-        composer-flags: ['', '--prefer-lowest']
     steps:
       - uses: actions/checkout@v4
 
@@ -31,13 +30,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ matrix.php-version }}-${{ matrix.composer-flags }}-${{ hashFiles('**/composer.json', '**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.json', '**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-composer-${{ matrix.php-version }}-${{ matrix.composer-flags }}-
             ${{ runner.os }}-composer-${{ matrix.php-version }}-
 
       - name: Install composer dependencies
-        run: composer update ${{ matrix.composer-flags }} --no-interaction --no-progress --prefer-dist --ansi
+        run: composer update --no-interaction --no-progress --prefer-dist --ansi
 
       - name: Install npm dependencies
         run: npm ci
